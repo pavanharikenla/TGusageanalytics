@@ -60,7 +60,7 @@ function generatePieChartProduct(responseObj){
 		        }
 	         };
 
-	    $.plot($("#flot-pie-chart-tg"), data, options);
+	    $.plot($("#morris-donut-chart-tg"), data, options);
 }
 function generatepieChartSmartPh(responseObj){
 	var productData = responseObj.phonesAndTablets;
@@ -151,6 +151,10 @@ function generateCallPageBarChart(responseObj){
         xLabelAngle: 35,
         hideHover: 'true',
         resize: true
+    }).on('click', function(i, row){
+  	  console.log(i, row);
+	  var ddDateObj = row;
+	  getCallUsageByDate(ddDateObj.date);
     });
 }
 

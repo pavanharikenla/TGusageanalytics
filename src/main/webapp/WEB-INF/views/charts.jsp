@@ -275,7 +275,25 @@
 					</div>
 				</div>
 				<!-- /.row -->
-
+				<div class="row">
+					<div class="col-lg-6">
+                    	<div class="panel panel-default" id="flot-bar-chart-dialyVol-panel">
+	                        <div class="panel-heading" id="flot-bar-chart-dialyVol-panel-head" style="display: none;">
+	                            <h3 class="panel-title">
+	                            	<i class="fa fa-bar-chart-o fa-fw"></i><span id="hourlySpanTitle"></span>
+	                            	
+	                            </h3>
+	                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="flot-chart">
+                                <div class="flot-chart-content" id="flot-pie-chart-tg-sm"></div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    </div>
+                 </div>
                 <!--  <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default">
@@ -384,6 +402,14 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<%= request.getContextPath() %>/resources/js/bootstrap.min.js"></script>
+    
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/excanvas.min.js"></script>
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/jquery.flot.js"></script>
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/jquery.flot.time.js"></script>
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="<%= request.getContextPath() %>/resources/js/plugins/flot/flot-data.js"></script>    
 
     <!-- Morris Charts JavaScript -->
     <script src="<%= request.getContextPath() %>/resources/js/plugins/morris/raphael.min.js"></script>
@@ -397,6 +423,7 @@
 <style>
 .navbar-right{margin-top:20px;color:white !important;}
 #morris-bar-chart-dataVol{min-height: 250px;}
+#flot-pie-chart-tg-sm{min-height: 250px;}
 #prevNav{cursor: pointer;}
 #nextNav{cursor: pointer;}
 .huge {

@@ -233,6 +233,39 @@ public class ChartController {
 		logger.info("bye now");
 		return mav;
 	}
+	
+	@RequestMapping(value = "/getCallByDate", method = RequestMethod.GET)
+	@ResponseBody
+	public String getDataByDate(@RequestParam("dateVal") String dateVal) {
+		JSONObject finalRes = new JSONObject();
+		Collection<JSONObject> recipentList = new ArrayList<JSONObject>();
+		
+		JSONObject timeObj = new JSONObject();
+		timeObj.put("label", "Verizon");
+		timeObj.put("data", "60");
+		recipentList.add(timeObj);
+		
+		JSONObject timeObj1 = new JSONObject();
+		timeObj1.put("label", "Tsprint");
+		timeObj1.put("data", "45");
+		recipentList.add(timeObj1);
+
+		JSONObject timeObj2 = new JSONObject();
+		timeObj2.put("label", "AT&T");
+		timeObj2.put("data", "30");
+		recipentList.add(timeObj2);
+		
+		JSONObject timeObj3 = new JSONObject();
+		timeObj3.put("label", "centuryLink");
+		timeObj3.put("data", "55");
+		recipentList.add(timeObj3);
+		
+				
+		finalRes.put("recipientListByDate", recipentList);
+		
+		return finalRes.toString();
+	}
+	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView search(Locale locale, Model model) {
 		

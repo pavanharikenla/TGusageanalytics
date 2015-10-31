@@ -86,6 +86,14 @@ function closeHourlyChart(){
 	$('#hourlySpanTitle').html('');
 }
 
+function closeRecipientChart(){
+	$('#flot-pie-chart-tg-sm').empty();
+	$('#flot-pie-chart-tg-sm').css('min-height','10px');
+	$('#flot-bar-chart-dialyVol-panel').removeClass('panel');
+	$('#flot-bar-chart-dialyVol-panel-head').css("display","none");
+	$('#hourlySpanTitle').html('');
+}
+
 function getDataUsageByDate(dateObj){
 	var urlLnk = contextpath+"/getDataByDate?dateVal="+dateObj;
 	$.ajax({url: urlLnk, success: function(result){
@@ -94,6 +102,18 @@ function getDataUsageByDate(dateObj){
         generateDataPageHourlyChart(hourlyList);
         $('#morris-bar-chart-dialyVol-panel').addClass('panel');
     	$('#morris-bar-chart-dialyVol-panel-head').css("display","");
+    	$('#hourlySpanTitle').html(dateObj);
+    }});
+}
+
+function getCallUsageByDate(dateObj){
+	var urlLnk = contextpath+"/getCallByDate?dateVal="+dateObj;
+	$.ajax({url: urlLnk, success: function(result){
+        var jsonObjResp = JSON.parse(result);
+        var recipientList = jsonObjResp.recipientListByDate;
+        generatePieChartProductCall(recipientList);
+        $('#flot-bar-chart-dialyVol-panel').addClass('panel');
+    	$('#flot-bar-chart-dialyVol-panel-head').css("display","");
     	$('#hourlySpanTitle').html(dateObj);
     }});
 }
@@ -116,4 +136,35 @@ function generateDataPageHourlyChart(responseObj){
         hideHover: 'true',
         resize: true
     });
+}
+
+function generatePieChartProductCall(responseObj){
+	var productData = responseObj;
+	//alert(JSON.stringify(productData));
+	// Flot Pie Chart with Tooltips
+	
+	var data = [
+	            { label: "Verizon",  data: 19.5, color: "#4572A7"},
+	            { label: "TMobile",  data: 4.5, color: "#80699B"},
+	            { label: "AT&T",  data: 36.6, color: "#AA4643"},
+	            { label: "CenturyLink",  data: 36.3, color: "#89A54E"},
+	            { label: "Other",  data: 0.8, color: "#3D96AE"}
+	        ];
+	var options = {
+            series: {
+                pie: {show: true}
+            },grid: {
+	            hoverable: true
+	        },tooltip: true,
+	        tooltipOpts: {
+	            content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+	            shifts: {
+	                x: 20,
+	                y: 0
+	            },
+	            defaultTheme: false
+	        }
+         };
+
+    $.plot($("#flot-pie-chart-tg-sm"), data, options);
 }
