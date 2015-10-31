@@ -277,6 +277,23 @@
 				<!-- /.row -->
 				<div class="row">
 					<div class="col-lg-6">
+						<div class="panel panel-default">
+	                        <div class="panel-heading">
+	                            <h3 class="panel-title">
+	                            	<i class="fa fa-bar-chart-o fa-fw"></i><span id="hourlySpanTitle1">Usage by Network</span>
+	                            	
+	                            </h3>
+	                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="flot-chart">
+                                <div class="flot-chart-content" id="flot-pie-chart-tg"></div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+					</div>
+					<div class="col-lg-6">
                     	<div class="panel panel-default" id="flot-bar-chart-dialyVol-panel">
 	                        <div class="panel-heading" id="flot-bar-chart-dialyVol-panel-head" style="display: none;">
 	                            <h3 class="panel-title">
@@ -424,6 +441,7 @@
 .navbar-right{margin-top:20px;color:white !important;}
 #morris-bar-chart-dataVol{min-height: 250px;}
 #flot-pie-chart-tg-sm{min-height: 250px;}
+#flot-pie-chart-tg{min-height: 250px;}
 #prevNav{cursor: pointer;}
 #nextNav{cursor: pointer;}
 .huge {
@@ -433,7 +451,9 @@
 <script type="text/javascript">
 <% ChartBean home = (ChartBean)request.getAttribute("model"); %>
 var dataUsage = <%= home.getDataUsageList()%>;
+var networkUsage = <%= home.getNetworkDataList()%>;
 generateCallPageBarChart(dataUsage);
+generatePieChartByNetwork(networkUsage);
 // generateDonut(ageGroupList);
 // generateAreaChart(categoryData);
 </script>

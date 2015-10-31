@@ -63,6 +63,7 @@ public class ChartController {
 		try{
 			Collection<JSONObject> dataList = new ArrayList<JSONObject>();
 			TreeMap<String,String> dataListObj = new TreeMap<String,String>();
+			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
 			
 			JSONObject timeObject = new JSONObject();
 			timeObject.put("date", "10-30-2015");
@@ -111,6 +112,35 @@ public class ChartController {
 			finalObj.put("dataListByDate", dataList);
 			bean.setDataListRecords(dataListObj);
 			bean.setDataUsageList(finalObj);
+			//network
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", "25.5");
+			networkList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", "14.5");
+			networkList.add(timeObj1);
+
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", "30.6");
+			networkList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", "32.3");
+			networkList.add(timeObj3);			
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", "10.8");
+			networkList.add(timeObj4);
+			
+			JSONObject finalNetObj = new JSONObject();
+			finalNetObj.put("networkListPast", networkList);
+			bean.setNetworkDataList(finalNetObj);
 			
 			/*QueryResponse response = homeservice.getServiceResponse(query);
 			Collection<JSONObject> productsList = new ArrayList<JSONObject>();
@@ -250,7 +280,7 @@ public class ChartController {
 		timeObj1.put("data", "45");
 		recipentList.add(timeObj1);
 
-		JSONObject timeObj2 = new JSONObject();
+		/*JSONObject timeObj2 = new JSONObject();
 		timeObj2.put("label", "AT&T");
 		timeObj2.put("data", "30");
 		recipentList.add(timeObj2);
@@ -258,7 +288,7 @@ public class ChartController {
 		JSONObject timeObj3 = new JSONObject();
 		timeObj3.put("label", "centuryLink");
 		timeObj3.put("data", "55");
-		recipentList.add(timeObj3);
+		recipentList.add(timeObj3);*/
 		
 				
 		finalRes.put("recipientListByDate", recipentList);

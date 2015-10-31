@@ -8,7 +8,14 @@ public class ChartBean {
 	private JSONObject productsJSON;
 	private JSONObject smartphoneAndTablets;
 	private JSONObject sentimentDataObject;
+	private JSONObject networkDataList;
 	
+	public JSONObject getNetworkDataList() {
+		return networkDataList;
+	}
+	public void setNetworkDataList(JSONObject networkDataList) {
+		this.networkDataList = networkDataList;
+	}
 	private TreeMap<String,String> dataListRecords = new TreeMap<String,String>();
 	private JSONObject dataUsageList;
 	

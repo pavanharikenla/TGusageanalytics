@@ -158,6 +158,38 @@ function generateCallPageBarChart(responseObj){
     });
 }
 
+function generatePieChartByNetwork(responseObj){
+	//var productData = responseObj.networkListPast;
+	//alert(JSON.stringify(productData));
+	// Flot Pie Chart with Tooltips
+	
+	var data = [
+	            { label: "Verizon",  data: 25.5, color: "#4572A7"},
+	            { label: "TMobile",  data: 14.5, color: "#80699B"},
+	            { label: "AT&T",  data: 30.6, color: "#AA4643"},
+	            { label: "CenturyLink",  data: 32.3, color: "#89A54E"},
+	            { label: "Other",  data: 10.8, color: "#3D96AE"}
+	        ];
+	//var data = productData;
+	var options = {
+            series: {
+                pie: {show: true}
+            },grid: {
+	            hoverable: true
+	        },tooltip: true,
+	        tooltipOpts: {
+	            content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+	            shifts: {
+	                x: 20,
+	                y: 0
+	            },
+	            defaultTheme: false
+	        }
+         };
+
+    $.plot($("#flot-pie-chart-tg"), data, options);
+}
+
 var getBytesWithUnit = function( bytes ){
 	//alert(bytes);
 	if( isNaN( bytes ) ){ return; }

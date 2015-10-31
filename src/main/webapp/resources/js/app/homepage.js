@@ -108,7 +108,7 @@ function getDataUsageByDate(dateObj){
 
 function getCallUsageByDate(dateObj){
 	var urlLnk = contextpath+"/getCallByDate?dateVal="+dateObj;
-	$.ajax({url: urlLnk, success: function(result){
+	$.ajax({url: urlLnk, success: function(result){		
         var jsonObjResp = JSON.parse(result);
         var recipientList = jsonObjResp.recipientListByDate;
         generatePieChartProductCall(recipientList);
@@ -150,6 +150,7 @@ function generatePieChartProductCall(responseObj){
 	            { label: "CenturyLink",  data: 36.3, color: "#89A54E"},
 	            { label: "Other",  data: 0.8, color: "#3D96AE"}
 	        ];
+	//var data = productData;
 	var options = {
             series: {
                 pie: {show: true}
