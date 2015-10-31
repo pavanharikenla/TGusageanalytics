@@ -225,7 +225,7 @@
                         </h1> -->
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-dashboard"></i> Data Usage
+                                <i class="fa fa-rss"></i> Data Usage
                             </li>
                         </ol>
                     </div>
