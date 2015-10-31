@@ -69,11 +69,11 @@
             ms - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="active">
+                    <li>
                         <a href="#" onclick="requestHome();"><i class="fa fa-fw fa-rss"></i>&nbsp;Data Usage</a>
                     </li>
-                    <li>
-                        <a href="#" onclick="requestCharts();"><i class="fa fa-fw fa-bar-chart-o"></i>&nbsp;Call Usage</a>
+                    <li  class="active">
+                        <a href="#" onclick="requestCharts();"><i class="fa fa-fw fa-phone-square"></i>&nbsp;Call Usage</a>
                     </li>
                     <li>
                     	<a href="#" onclick="requestSearch();"><i class="fa fa-fw fa-exclamation-triangle"></i>&nbsp;Recommendations</a>
@@ -123,7 +123,7 @@
                         </h1> -->
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-dashboard"></i> Data Usage
+                                <i class="fa fa-phone-square"></i> Call Usage
                             </li>
                         </ol>
                     </div>
