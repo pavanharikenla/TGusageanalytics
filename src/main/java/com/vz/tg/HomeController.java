@@ -1,14 +1,26 @@
 package com.vz.tg;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.util.NamedList;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,21 +51,127 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model) {
 		
-		logger.info("Welcome home! The client locale is {}.", locale);
+		//logger.info("Welcome home! The client locale is {}.", locale);
 		
 		
 		//model = new object.. set values and set to MAV..
+		String mobNumber = "9052100567";//read from login..
 		
-		SolrQuery query = new SolrQuery("id:*");
-		query.set("group", true);
-		query.set("group.field", "sentimentScore");
-		query.addSort("sentimentScore",SolrQuery.ORDER.asc);
+		DateFormat solrFormat = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss'Z'");
+		DateFormat dateFormat = new SimpleDateFormat ("E MMM d hh:mm:ss zzz yyyy");
+		SimpleDateFormat newFormat = new SimpleDateFormat("MM-dd-yyyy");
+		
+		//+6DAY Not needed because data is not available for past days added +6DAY
+		SolrQuery query = new SolrQuery("mobile:"+mobNumber+" AND data_usage_end_time:[NOW-6DAY TO NOW]");
+		
+		query.set("facet.date", "data_usage_end_time");
+		query.set("facet.date.start", "NOW/DAY-6DAYS");
+		//+6DAY Not needed because data is not available for past days added +6DAY
+		query.set("facet.date.end", "NOW/DAY");
+		query.set("facet.date.gap", "+1DAY");
+		query.addFacetPivotField("data_usage_end_time,dataUsed");
+		
 		HomeBean bean = new HomeBean();
+		ArrayList<String> dateList = new ArrayList<String>();
 		try{
 			Collection<JSONObject> dataList = new ArrayList<JSONObject>();
 			TreeMap<String,Long> dataListObj = new TreeMap<String,Long>();
 			
-			JSONObject timeObject = new JSONObject();
+			QueryResponse response = homeservice.getServiceResponse(query);
+			//List<Date> myList = new ArrayList<Date>();
+			ConcurrentHashMap<String,Integer> dateandUsed = new ConcurrentHashMap<String,Integer>();
+			if(response!=null){
+				System.out.println(response);
+				
+				//Prepare dateList for home page..
+				
+				List<FacetField> dateFacetList = response.getFacetDates();
+				
+				for(FacetField facet:dateFacetList){
+					List<Count> facetList = facet.getValues();
+					Iterator itr =facetList.iterator();
+					while(itr.hasNext()){
+						Count dateObj = (Count)itr.next();
+						if(dateObj!=null){
+							String dateVal = dateObj.getName();
+							System.out.println(dateVal);
+							Date beforeParse;
+							try {
+								beforeParse = solrFormat.parse(dateVal);
+								dateList.add(newFormat.format(beforeParse));
+								dateandUsed.put(newFormat.format(beforeParse), 0);
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+					System.out.println();
+				}
+				
+				
+				
+				NamedList<List<PivotField>> pivotNamedList = response.getFacetPivot();
+				
+				System.out.println(pivotNamedList.size());
+				for( int i=0;i<pivotNamedList.size();i++){
+					List<PivotField> pvotList = pivotNamedList.getVal(i);
+					for(PivotField pf:pvotList){
+						if(pf!=null){
+							System.out.println("pivot:"+pf.getValue());
+							Date beforeParse = new Date();
+							Date afterParse = new Date();
+							String afterParseStr ="";
+							try {
+								beforeParse = dateFormat.parse(pf.getValue().toString());
+								afterParseStr = newFormat.format(beforeParse);
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							JSONObject categoryObj = new JSONObject();
+							//System.out.println(pf.getField());
+							List<PivotField> dataUsedpivotList = pf.getPivot();
+							int usedTotal =0;
+							for(PivotField dataUsedpivot:dataUsedpivotList){
+								if(dataUsedpivot!=null){
+									if(dataUsedpivot.getValue()!=null){
+										usedTotal = usedTotal + dataUsedpivot.getCount();
+									}
+									
+								}
+							}
+							if(dateandUsed.containsKey(afterParseStr)){
+								int currentTotal = dateandUsed.get(afterParseStr);
+								currentTotal = currentTotal+usedTotal;
+								dateandUsed.put(afterParseStr, currentTotal);
+							}else{
+								dateandUsed.put(afterParseStr, usedTotal);
+							}
+						}
+					}
+					
+				}
+			}
+			
+			for (Map.Entry<String, Integer> e : dateandUsed.entrySet()) {
+			    String dateFinal = e.getKey();
+			    //System.out.println(key);
+			    Integer usedValFinal = e.getValue();
+			    //System.out.println(value);
+			    JSONObject timeObject = new JSONObject();
+				timeObject.put("date", dateFinal);
+				timeObject.put("bytes", usedValFinal*1024);
+				dataList.add(timeObject);
+				long bytesUsed =0;
+				try{
+					bytesUsed = usedValFinal*1024;
+				}catch(Exception ex){
+					logger.error(ex.getMessage());
+				}
+				dataListObj.put(dateFinal, bytesUsed);
+			}
+			/*JSONObject timeObject = new JSONObject();
 			timeObject.put("date", "10-30-2015");
 			timeObject.put("bytes", 1023456);
 			dataList.add(timeObject);
@@ -94,7 +212,7 @@ public class HomeController {
 			timeObject6.put("date", "10-24-2015");
 			timeObject6.put("bytes", 10234516);
 			dataList.add(timeObject6);
-			dataListObj.put("10-24-2015", (long)10234516);
+			dataListObj.put("10-24-2015", (long)10234516);*/
 			
 			JSONObject finalObj = new JSONObject();
 			finalObj.put("dataListByDate", dataList);
@@ -132,6 +250,7 @@ public class HomeController {
 			JSONObject appUsageObj = new JSONObject();
 			appUsageObj.put("appUsageList", appList);
 			bean.setAppUsageList(appUsageObj);
+			
 			
 			
 			
