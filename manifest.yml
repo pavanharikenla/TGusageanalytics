@@ -1,0 +1,4 @@
+applications:
+- name: tgusageanalytics
+  instances: 1
+  path: ./target/TGusageanalytics-0.0.1-SNAPSHOT.war
