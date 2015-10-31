@@ -115,27 +115,27 @@ public class ChartController {
 			//network
 			JSONObject timeObj = new JSONObject();
 			timeObj.put("label", "Verizon");
-			timeObj.put("data", "25.5");
+			timeObj.put("data", 25.5);
 			networkList.add(timeObj);
 			
 			JSONObject timeObj1 = new JSONObject();
 			timeObj1.put("label", "TMobile");
-			timeObj1.put("data", "14.5");
+			timeObj1.put("data", 14.5);
 			networkList.add(timeObj1);
 
 			JSONObject timeObj2 = new JSONObject();
 			timeObj2.put("label", "AT&T");
-			timeObj2.put("data", "30.6");
+			timeObj2.put("data", 30.6);
 			networkList.add(timeObj2);
 			
 			JSONObject timeObj3 = new JSONObject();
 			timeObj3.put("label", "centuryLink");
-			timeObj3.put("data", "32.3");
+			timeObj3.put("data", 32.3);
 			networkList.add(timeObj3);			
 			
 			JSONObject timeObj4 = new JSONObject();
 			timeObj4.put("label", "Other");
-			timeObj4.put("data", "10.8");
+			timeObj4.put("data", 10.8);
 			networkList.add(timeObj4);
 			
 			JSONObject finalNetObj = new JSONObject();
@@ -272,24 +272,28 @@ public class ChartController {
 		
 		JSONObject timeObj = new JSONObject();
 		timeObj.put("label", "Verizon");
-		timeObj.put("data", "60");
+		timeObj.put("data", 19.5);
 		recipentList.add(timeObj);
 		
 		JSONObject timeObj1 = new JSONObject();
-		timeObj1.put("label", "Tsprint");
-		timeObj1.put("data", "45");
+		timeObj1.put("label", "TMobile");
+		timeObj1.put("data", 4.5);
 		recipentList.add(timeObj1);
 
-		/*JSONObject timeObj2 = new JSONObject();
+		JSONObject timeObj2 = new JSONObject();
 		timeObj2.put("label", "AT&T");
-		timeObj2.put("data", "30");
+		timeObj2.put("data", 36.6);
 		recipentList.add(timeObj2);
 		
 		JSONObject timeObj3 = new JSONObject();
 		timeObj3.put("label", "centuryLink");
-		timeObj3.put("data", "55");
-		recipentList.add(timeObj3);*/
+		timeObj3.put("data", 36.3);
+		recipentList.add(timeObj3);
 		
+		JSONObject timeObj4 = new JSONObject();
+		timeObj4.put("label", "Other");
+		timeObj4.put("data", 0.8);
+		recipentList.add(timeObj3);
 				
 		finalRes.put("recipientListByDate", recipentList);
 		

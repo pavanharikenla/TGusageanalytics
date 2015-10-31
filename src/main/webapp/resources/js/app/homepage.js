@@ -143,14 +143,14 @@ function generatePieChartProductCall(responseObj){
 	//alert(JSON.stringify(productData));
 	// Flot Pie Chart with Tooltips
 	
-	var data = [
+	/*var data = [
 	            { label: "Verizon",  data: 19.5, color: "#4572A7"},
 	            { label: "TMobile",  data: 4.5, color: "#80699B"},
 	            { label: "AT&T",  data: 36.6, color: "#AA4643"},
 	            { label: "CenturyLink",  data: 36.3, color: "#89A54E"},
 	            { label: "Other",  data: 0.8, color: "#3D96AE"}
-	        ];
-	//var data = productData;
+	        ];*/
+	var data = productData;
 	var options = {
             series: {
                 pie: {show: true}
