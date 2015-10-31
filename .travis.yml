@@ -5,6 +5,6 @@ deploy:
   provider: cloudfoundry 
   api: https://api.run.pivotal.io
   username: mac.sum@gmail.com
-  password:252295
+  password:"252295"
   organization: TOP GUNS
   space: development
