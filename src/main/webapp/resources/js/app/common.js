@@ -17,7 +17,7 @@ function generateDonut(resObject){
 	    });
 }
 
-function generateAreaChart(resObject){
+/*function generateAreaChart(resObject){
 	var categoryList = resObject.categoryData;
 	//alert(JSON.stringify(categoryList));
 	// Area Chart
@@ -32,7 +32,7 @@ function generateAreaChart(resObject){
         parseTime: false,
         resize: true
     });
-}
+}*/
 
 
 
@@ -175,3 +175,56 @@ var getBytesWithUnit = function( bytes ){
         }
 	return bytes + units[i];
 };
+
+
+
+
+function generateAreaChart(resObject){
+	//var categoryList = resObject.categoryData;
+	//var hoursdata = '[{"time":"1AM","24-10-2015":123134,"25-10-2015":345623,"26-10-2015":12234},{"time":"2AM","24-10-2015":123134,"25-10-2015":12234,"26-10-2015":345623},'+
+	//'{"time":"3AM","24-10-2015":345623,"25-10-2015":123134,"26-10-2015":12234}]';
+	//alert(JSON.stringify(categoryList));
+	// Area Chart
+	//var hoursList = JSON.parse(hoursdata);
+	//var hoursList = JSON.parse(resObject);
+	var hoursList = resObject;
+	//alert(JSON.stringify(hoursList))
+	$('#morris-bar-chart-dialyVol').empty();
+	$('#morris-bar-chart-dialyVol').css('min-height','250px');
+	var xaxisList = [];
+	for(var i=0;i<hoursList.length;i++){
+		var hoursCurrent = hoursList[i];
+		//alert(hoursCurrent);
+		$.each(hoursCurrent, function(k, v) {
+		    //display the key and value pair
+			if(k!='time' && !xaxisList.contains(k)){
+				xaxisList.push(k);
+				//alert(k);
+			}
+		});
+	}
+	
+	
+	
+    Morris.Line({
+        element: 'morris-bar-chart-dialyVol',
+        data: hoursList,
+        xkey: 'time',
+        ykeys: xaxisList,
+        labels: xaxisList,
+        pointSize: 2,
+        hideHover: 'auto',
+        parseTime: false,
+        resize: true
+    });
+}
+
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}

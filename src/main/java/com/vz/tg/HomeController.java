@@ -1,25 +1,14 @@
 package com.vz.tg;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.Group;
-import org.apache.solr.client.solrj.response.GroupCommand;
-import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.util.NamedList;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -415,6 +404,49 @@ public class HomeController {
 		
 		return finalRes.toString();
 	}
+	
+	@RequestMapping(value = "/getPastDataByHours", method = RequestMethod.GET)
+	@ResponseBody
+	public String getPastDataByHours(@RequestParam("days") String dayCount) {
+		JSONObject finalRes = new JSONObject();
+		Collection<JSONObject> hourlyList = new ArrayList<JSONObject>();
+		
+		
+		
+		JSONObject timeObj = new JSONObject();
+		timeObj.put("time", "12AM");
+		timeObj.put("24-10-2015", "123456");
+		timeObj.put("25-10-2015", "123134");
+		timeObj.put("26-10-2015", "345623");
+		hourlyList.add(timeObj);
+		
+		JSONObject timeObj1 = new JSONObject();
+		timeObj1.put("time", "1AM");
+		timeObj1.put("24-10-2015", "123134");
+		timeObj1.put("25-10-2015", "1231346");
+		timeObj1.put("26-10-2015", "134");
+		hourlyList.add(timeObj1);
+
+		JSONObject timeObj2 = new JSONObject();
+		timeObj2.put("time", "2AM");
+		timeObj2.put("24-10-2015", "845612");
+		timeObj2.put("25-10-2015", "2123456");
+		timeObj2.put("26-10-2015", "634256");
+		hourlyList.add(timeObj2);
+		
+		JSONObject timeObj3 = new JSONObject();
+		timeObj3.put("time", "3AM");
+		timeObj3.put("24-10-2015", "12356");
+		timeObj3.put("25-10-2015", "121356");
+		timeObj3.put("26-10-2015", "2356");
+		hourlyList.add(timeObj3);
+		
+		finalRes.put("hourlyListByDays", hourlyList);
+		// finalRes.put("hourlyListByDays", hourlyListStr);
+		
+		return finalRes.toString();
+	}
+	
 	public Collection<JSONObject> getTweetResponse(String tweetType,int startRow,int endRow){
 		SolrQuery query = new SolrQuery("sentimentScore:"+tweetType);
 		query.setStart(startRow);

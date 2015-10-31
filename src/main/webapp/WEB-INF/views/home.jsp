@@ -241,7 +241,7 @@
                     </div>
                 </div> -->
                 <!-- /.row -->
-
+				<!-- 
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-primary">
@@ -331,7 +331,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- /.row -->
 
 				<div class="row">
@@ -339,7 +339,7 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h3 class="panel-title">
-									<i class="fa fa-bar-chart-o fa-fw"></i> Past 7 days
+									<i class="fa fa-bar-chart-o fa-fw"></i> <a href="#" onclick="showPast7DaysByHours()"> Past 7 days</a>
 								</h3>
 							</div>
 							<div class="panel-body">
@@ -404,6 +404,18 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i>Recommendations</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="recommendations"></div>
+                                
+                            </div>
+                        </div>
+                    </div>
                     <!-- 
                     <div class="col-lg-4">
                         <div class="panel panel-default">
@@ -450,7 +462,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div> 
                     <div class="col-lg-8">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -481,7 +493,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
                 <!-- /.row -->
 
@@ -526,5 +538,5 @@ var dataUsage = <%= home.getDataUsageList()%>;
 generateDataPageBarChart(dataUsage);
 var appUsage = <%= home.getAppUsageList()%>;
 generateDonut(appUsage);
-// generateAreaChart(categoryData);
+
 </script>

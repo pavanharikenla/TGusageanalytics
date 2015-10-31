@@ -168,3 +168,19 @@ function generatePieChartProductCall(responseObj){
 
     $.plot($("#flot-pie-chart-tg-sm"), data, options);
 }
+
+
+function showPast7DaysByHours(){
+	var daysCount = 7;
+	var urlLnk = contextpath+"/getPastDataByHours?days="+daysCount;
+	$.ajax({url: urlLnk, success: function(result){
+        var jsonObjResp = JSON.parse(result);
+        
+        var hourlyList = jsonObjResp.hourlyListByDays;
+        //alert(JSON.stringify(hourlyList));
+        generateAreaChart(hourlyList);
+        $('#morris-bar-chart-dialyVol-panel').addClass('panel');
+    	$('#morris-bar-chart-dialyVol-panel-head').css("display","");
+    	$('#hourlySpanTitle').html('Past 7 days');
+    }});
+}
