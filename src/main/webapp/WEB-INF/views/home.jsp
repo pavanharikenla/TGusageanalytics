@@ -37,6 +37,7 @@
     <![endif]-->
 	<script type="text/javascript">
 	var contextpath = "<%= request.getContextPath() %>";
+	var dataUsageVal = 0;
 	</script>
 </head>
 
@@ -333,6 +334,26 @@
                     </div>
                 </div> -->
                 <!-- /.row -->
+				<div class="row">
+					<div class="col-lg-6 col-lg-offset-3">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<i class="fa fa-bar-chart-o fa-fw"></i> <a href="#"
+										onclick="showPast7DaysByHours()"> Data Meter (Based on Past 7 days usage)</a>
+								</h3>
+							</div>
+							<div class="panel-body">
+									<span id="limitMessage"></span>
+								<p class="styled">
+									<meter min="0" max="100" low="25" high="75" optimum="100"
+										value="10" id="usageMeter"></meter>
+									<span id="usageMessage"></span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<div class="row">
 					<div class="col-lg-12">
@@ -358,7 +379,7 @@
 													varStatus="i">
 													<tr>
 														<td>${dateObj.key}</td>
-														<td><script type="text/javascript">var byteVal = '${dateObj.value}';document.write(getBytesWithUnit(byteVal));</script></td>
+														<td><script type="text/javascript">var byteVal = '${dateObj.value}';dataUsageVal = dataUsageVal+parseInt(byteVal);document.write(getBytesWithUnit(byteVal));</script></td>
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -531,8 +552,113 @@
 .huge {
     font-size: 30px!important;
 }
+
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 100%;
+  background: #333;
+}
+
+
+
+h1 {
+  margin-top: 0;
+}
+
+meter,
+progress {
+  width: 100%;
+}
+
+.styled meter {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  width: 100%;
+  height: 30px;
+  
+  /* For Firefox */
+  background: #EEE;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;
+  border-radius: 3px;
+}
+
+/* WebKit */
+.styled meter::-webkit-meter-bar {
+  background: #EEE;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;
+  border-radius: 3px;
+}
+
+.styled meter::-webkit-meter-optimum-value,
+.styled meter::-webkit-meter-suboptimum-value,
+.styled meter::-webkit-meter-even-less-good-value {
+  border-radius: 3px;
+}
+
+.styled meter::-webkit-meter-optimum-value {
+  background: #CC4600;
+}
+
+.styled meter::-webkit-meter-suboptimum-value {
+  background: #FFDB1A;
+}
+
+.styled meter::-webkit-meter-even-less-good-value  {
+  background: #86CC00;
+}
+
+
+/* Firefox */
+.styled meter::-moz-meter-bar {
+  border-radius: 3px;
+}
+
+.styled meter:-moz-meter-optimum::-moz-meter-bar {
+  background: #CC4600;
+}
+
+.styled meter:-moz-meter-sub-optimum::-moz-meter-bar {
+  background: #FFDB1A;
+}
+
+.styled meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+  background: #86CC00;
+}
+
+
+
 </style>
 <script type="text/javascript">
+
+var dataLimit = 524288000;
+var dataLimitForWeek = dataLimit/4;
+//alert('dataLimitForWeek:'+dataLimitForWeek);
+//alert('dataUsageVal:'+dataUsageVal);
+document.getElementById("usageMeter").high = dataLimitForWeek;
+document.getElementById("usageMeter").value = dataUsageVal;
+
+var limitMessage = '';
+
+if(dataUsageVal>dataLimitForWeek){
+	limitMessage = 'Usage Exceeded';
+}
+
+$('#usageMessage').html('Used <b>'+getBytesWithUnit(dataUsageVal)+'</b> of <b>'+getBytesWithUnit(dataLimitForWeek) +'</b> Limit.');
+if(limitMessage!=''){
+	$('#limitMessage').html('<marquee><b color="green">'+limitMessage+'</b></marquee>');
+}
+
+
 <% HomeBean home = (HomeBean)request.getAttribute("model"); %>
 var dataUsage = <%= home.getDataUsageList()%>;
 generateDataPageBarChart(dataUsage);
