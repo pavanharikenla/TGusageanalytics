@@ -66,47 +66,47 @@ public class ChartController {
 			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
 			
 			JSONObject timeObject = new JSONObject();
-			timeObject.put("date", "10-30-2015");
+			timeObject.put("date", "11-03-2015");
 			timeObject.put("duration", "03:34:42");
 			dataList.add(timeObject);
-			dataListObj.put("10-30-2015", "03:34:42");
+			dataListObj.put("11-03-2015", "03:34:42");
 			
 			
 			JSONObject timeObject1 = new JSONObject();
-			timeObject1.put("date", "10-29-2015");
+			timeObject1.put("date", "11-02-2015");
 			timeObject1.put("duration", "05:34:22");
 			dataList.add(timeObject1);
-			dataListObj.put("10-29-2015", "05:34:22");
+			dataListObj.put("11-02-2015", "05:34:22");
 			
 			JSONObject timeObject2 = new JSONObject();
-			timeObject2.put("date", "10-28-2015");
+			timeObject2.put("date", "11-01-2015");
 			timeObject2.put("duration", "02:22:35");
 			dataList.add(timeObject2);
-			dataListObj.put("10-28-2015", "02:22:35");
+			dataListObj.put("11-01-2015", "02:22:35");
 			
 			JSONObject timeObject3 = new JSONObject();
-			timeObject3.put("date", "10-27-2015");
+			timeObject3.put("date", "10-31-2015");
 			timeObject3.put("duration", "10:50:09");
 			dataList.add(timeObject3);
-			dataListObj.put("10-27-2015", "10:50:09");
+			dataListObj.put("10-31-2015", "10:50:09");
 			
 			JSONObject timeObject4 = new JSONObject();
-			timeObject4.put("date", "10-26-2015");
+			timeObject4.put("date", "10-30-2015");
 			timeObject4.put("duration", "08:09:03");
 			dataList.add(timeObject4);
-			dataListObj.put("10-26-2015", "08:09:03");
+			dataListObj.put("10-30-2015", "08:09:03");
 			
 			JSONObject timeObject5 = new JSONObject();
-			timeObject5.put("date", "10-25-2015");
+			timeObject5.put("date", "10-29-2015");
 			timeObject5.put("duration", "06:34:36");
 			dataList.add(timeObject5);
-			dataListObj.put("10-25-2015", "06:34:36");
+			dataListObj.put("10-29-2015", "06:34:36");
 			
 			JSONObject timeObject6 = new JSONObject();
-			timeObject6.put("date", "10-24-2015");
+			timeObject6.put("date", "10-28-2015");
 			timeObject6.put("duration", "09:31:59");
 			dataList.add(timeObject6);
-			dataListObj.put("10-24-2015", "09:31:59");
+			dataListObj.put("10-28-2015", "09:31:59");
 			
 			JSONObject finalObj = new JSONObject();
 			finalObj.put("dataListByDate", dataList);
