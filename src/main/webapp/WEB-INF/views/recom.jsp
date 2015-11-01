@@ -280,7 +280,61 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h3 class="panel-title">
-									<i class="fa"></i> Based on last 6 months data usage, we recommend ${model.selPlan} MB / Month plan for you. For  more info Dail +813-705-2946
+									<i class="fa"></i> Your current Data plan is 500 MB / Month. Based on last 6 months data usage, we recommend ${model.selPlan} MB / Month plan for you. For  more info Dail +813-705-2946
+								</h3>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<i class="fa fa-bar-chart-o fa-fw"></i> Past 6 Months
+								</h3>
+							</div>
+							<div class="panel-body">
+								<div class="col-lg-6">
+									<div class="table-responsive">
+										<table class="table table-bordered table-hover table-striped"
+											id="tweetTable">
+											<!-- <thead>
+												<tr>
+													<th>Tweets</th>
+												</tr>
+											</thead> -->
+											<tbody>
+												<c:forEach var="dateObj" items="${model.calldataListRecords}"
+													varStatus="i">
+													<tr>
+														<td>${dateObj.key}</td>
+														<td>${dateObj.value}</td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+										
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="panel panel-default">
+										<div>
+											<div id="morris-bar-chart-dataVol-call"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<i class="fa"></i> Your current Call plan is Vz150. Based on last 6 months CDR usage, we recommend Vz200 plan for you. For  more info Dail +813-705-2946
 								</h3>
 							</div>
 						</div>
@@ -463,8 +517,10 @@
 <script type="text/javascript">
 <% RecomBean home = (RecomBean)request.getAttribute("model"); %>
 var dataUsage = <%= home.getDataUsageList()%>;
+var calldataUsage = <%= home.getCalldataUsageList()%>;
 
 generateRecomPageBarChart(dataUsage);
+generateCallRecomPageBarChart(calldataUsage);
 //generatePieChartByNetwork(networkUsage);
 // generateDonut(ageGroupList);
 // generateAreaChart(categoryData);

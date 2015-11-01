@@ -269,31 +269,183 @@ public class ChartController {
 	public String getDataByDate(@RequestParam("dateVal") String dateVal) {
 		JSONObject finalRes = new JSONObject();
 		Collection<JSONObject> recipentList = new ArrayList<JSONObject>();
-		
-		JSONObject timeObj = new JSONObject();
-		timeObj.put("label", "Verizon");
-		timeObj.put("data", 19.5);
-		recipentList.add(timeObj);
-		
-		JSONObject timeObj1 = new JSONObject();
-		timeObj1.put("label", "TMobile");
-		timeObj1.put("data", 4.5);
-		recipentList.add(timeObj1);
-
-		JSONObject timeObj2 = new JSONObject();
-		timeObj2.put("label", "AT&T");
-		timeObj2.put("data", 36.6);
-		recipentList.add(timeObj2);
-		
-		JSONObject timeObj3 = new JSONObject();
-		timeObj3.put("label", "centuryLink");
-		timeObj3.put("data", 36.3);
-		recipentList.add(timeObj3);
-		
-		JSONObject timeObj4 = new JSONObject();
-		timeObj4.put("label", "Other");
-		timeObj4.put("data", 0.8);
-		recipentList.add(timeObj3);
+		System.out.println("dateVal:"+dateVal);
+		if("11-03-2015".equals(dateVal)){
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 19.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 4.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 36.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 36.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 0.8);
+			recipentList.add(timeObj4);
+		}else if("11-02-2015".equals(dateVal)){
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 10.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 9.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 30.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 20.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 5.8);
+			recipentList.add(timeObj4);
+		}else if("11-01-2015".equals(dateVal)){
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 10.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 7.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 9.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 8.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 5.8);
+			recipentList.add(timeObj4);
+		}else if("10-31-2015".equals(dateVal)){
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 12.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 7.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 40.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 15.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 4.8);
+			recipentList.add(timeObj4);
+		}else if("10-30-2015".equals(dateVal)){
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 29.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 4.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 10.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 20.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 2.8);
+			recipentList.add(timeObj4);
+		}else if("10-29-2015".equals(dateVal)){
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 10.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 20.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 8.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 19.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 7.8);
+			recipentList.add(timeObj4);
+		}else {
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", "Verizon");
+			timeObj.put("data", 18.5);
+			recipentList.add(timeObj);
+			
+			JSONObject timeObj1 = new JSONObject();
+			timeObj1.put("label", "TMobile");
+			timeObj1.put("data", 14.5);
+			recipentList.add(timeObj1);
+	
+			JSONObject timeObj2 = new JSONObject();
+			timeObj2.put("label", "AT&T");
+			timeObj2.put("data", 25.6);
+			recipentList.add(timeObj2);
+			
+			JSONObject timeObj3 = new JSONObject();
+			timeObj3.put("label", "centuryLink");
+			timeObj3.put("data", 30.3);
+			recipentList.add(timeObj3);
+			
+			JSONObject timeObj4 = new JSONObject();
+			timeObj4.put("label", "Other");
+			timeObj4.put("data", 6.8);
+			recipentList.add(timeObj4);
+		}
 				
 		finalRes.put("recipientListByDate", recipentList);
 		

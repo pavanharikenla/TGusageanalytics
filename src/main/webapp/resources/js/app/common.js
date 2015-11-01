@@ -176,6 +176,24 @@ function generateRecomPageBarChart(responseObj){
     });
 }
 
+function generateCallRecomPageBarChart(responseObj){
+	//alert(JSON.stringify(responseObj));
+	$('#morris-bar-chart-dataVol-call').empty();
+	var dataObj = responseObj.calldataListByDate;
+	//alert(JSON.stringify(dataObj));
+    Morris.Bar({
+        element: 'morris-bar-chart-dataVol-call',
+        data: dataObj,
+        xkey: 'date',
+        ykeys: ['duration'],
+        labels: ['call duration (hrs)'],
+        barRatio: 0.4,
+        xLabelAngle: 35,
+        hideHover: 'true',
+        resize: true
+    });
+}
+
 function generatePieChartByNetwork(responseObj){
 	var productData = responseObj.networkListPast;
 	//alert(JSON.stringify(productData));

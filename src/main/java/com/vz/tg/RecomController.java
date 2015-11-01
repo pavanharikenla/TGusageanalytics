@@ -66,6 +66,9 @@ public class RecomController {
 			TreeMap<String,String> dataListObj = new TreeMap<String,String>();
 			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
 			
+			Collection<JSONObject> calldataList = new ArrayList<JSONObject>();
+			TreeMap<String,String> calldataListObj = new TreeMap<String,String>();
+			
 			JSONObject timeObject = new JSONObject();
 			timeObject.put("date", "October");
 			timeObject.put("duration", "650");
@@ -140,6 +143,49 @@ public class RecomController {
 				}
 				break;
 			}
+			
+			//call usage
+			JSONObject calltimeObject = new JSONObject();
+			calltimeObject.put("date", "October");
+			calltimeObject.put("duration", "90");
+			calldataList.add(calltimeObject);
+			calldataListObj.put("10-October", "90 hrs");
+			
+			
+			JSONObject calltimeObject1 = new JSONObject();
+			calltimeObject1.put("date", "September");
+			calltimeObject1.put("duration", "150");
+			calldataList.add(calltimeObject1);
+			calldataListObj.put("09-September", "150 hrs");
+			
+			JSONObject calltimeObject2 = new JSONObject();
+			calltimeObject2.put("date", "August");
+			calltimeObject2.put("duration", "60");
+			calldataList.add(calltimeObject2);
+			calldataListObj.put("08-August", "60 hrs");
+			
+			JSONObject calltimeObject3 = new JSONObject();
+			calltimeObject3.put("date", "July");
+			calltimeObject3.put("duration", "300");
+			calldataList.add(calltimeObject3);
+			calldataListObj.put("07-July", "300 hrs");
+			
+			JSONObject calltimeObject4 = new JSONObject();
+			calltimeObject4.put("date", "June");
+			calltimeObject4.put("duration", "240");
+			calldataList.add(calltimeObject4);
+			calldataListObj.put("06-June", "240 hrs");
+			
+			JSONObject calltimeObject5 = new JSONObject();
+			calltimeObject5.put("date", "May");
+			calltimeObject5.put("duration", "180");
+			calldataList.add(calltimeObject5);
+			calldataListObj.put("05-May", "180 hrs");
+			
+			JSONObject callfinalObj = new JSONObject();
+			callfinalObj.put("calldataListByDate", calldataList);
+			bean.setCalldataListRecords(calldataListObj);
+			bean.setCalldataUsageList(callfinalObj);
 			
 			//network
 			/*JSONObject timeObj = new JSONObject();

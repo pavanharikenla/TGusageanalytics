@@ -7,6 +7,20 @@ import org.json.JSONObject;
 public class RecomBean {
 	private TreeMap<String,String> dataListRecords = new TreeMap<String,String>();
 	private JSONObject dataUsageList;
+	private TreeMap<String,String> calldataListRecords = new TreeMap<String,String>();
+	private JSONObject calldataUsageList;
+	public TreeMap<String, String> getCalldataListRecords() {
+		return calldataListRecords;
+	}
+	public void setCalldataListRecords(TreeMap<String, String> calldataListRecords) {
+		this.calldataListRecords = calldataListRecords;
+	}
+	public JSONObject getCalldataUsageList() {
+		return calldataUsageList;
+	}
+	public void setCalldataUsageList(JSONObject calldataUsageList) {
+		this.calldataUsageList = calldataUsageList;
+	}
 	private Integer selPlan;
 	
 	public Integer getSelPlan() {
