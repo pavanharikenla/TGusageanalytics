@@ -111,7 +111,7 @@ function requestHome(){
 	window.location.href = contextpath + "/";
 }
 function requestSearch(){
-	window.location.href = contextpath + "/search";
+	window.location.href = contextpath + "/recom";
 }
 
 function generateDataPageBarChart(responseObj){
@@ -155,6 +155,24 @@ function generateCallPageBarChart(responseObj){
   	  console.log(i, row);
 	  var ddDateObj = row;
 	  getCallUsageByDate(ddDateObj.date);
+    });
+}
+
+function generateRecomPageBarChart(responseObj){
+	//alert(JSON.stringify(responseObj));
+	$('#morris-bar-chart-dataVol').empty();
+	var dataObj = responseObj.dataListByDate;
+	//alert(JSON.stringify(dataObj));
+    Morris.Bar({
+        element: 'morris-bar-chart-dataVol',
+        data: dataObj,
+        xkey: 'date',
+        ykeys: ['duration'],
+        labels: ['Data Usage'],
+        barRatio: 0.4,
+        xLabelAngle: 35,
+        hideHover: 'true',
+        resize: true
     });
 }
 

@@ -1,4 +1,4 @@
-<%@page import="com.vz.tg.model.ChartBean"%>
+<%@page import="com.vz.tg.model.RecomBean"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="false" %>
@@ -72,10 +72,10 @@
                     <li>
                         <a href="#" onclick="requestHome();"><i class="fa fa-fw fa-rss"></i>&nbsp;Data Usage</a>
                     </li>
-                    <li  class="active">
+                    <li>
                         <a href="#" onclick="requestCharts();"><i class="fa fa-fw fa-phone-square"></i>&nbsp;Call Usage</a>
                     </li>
-                    <li>
+                    <li class="active">
                     	<a href="#" onclick="requestSearch();"><i class="fa fa-fw fa-exclamation-triangle"></i>&nbsp;Recommendations</a>
                     </li>
                     <!-- 
@@ -123,7 +123,7 @@
                         </h1> -->
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-phone-square"></i> Call Usage
+                                <i class="fa fa-exclamation-triangle"></i> Recommendations
                             </li>
                         </ol>
                     </div>
@@ -237,7 +237,7 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h3 class="panel-title">
-									<i class="fa fa-bar-chart-o fa-fw"></i> Past 7 days
+									<i class="fa fa-bar-chart-o fa-fw"></i> Past 6 Months
 								</h3>
 							</div>
 							<div class="panel-body">
@@ -276,6 +276,18 @@
 				</div>
 				<!-- /.row -->
 				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<i class="fa"></i> Based on last 6 months data usage, we recommend ${model.selPlan} MB / Month plan for you. For  more info Dail +813-705-2946
+								</h3>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<%-- <div class="row">
 					<div class="col-lg-6">
 						<div class="panel panel-default">
 	                        <div class="panel-heading">
@@ -309,7 +321,7 @@
                         </div>
                         <!-- /.panel-body -->
                     </div>
-                    </div>
+                    </div>--%>
                  </div>
                 <!--  <div class="row">
                     <div class="col-lg-4">
@@ -449,11 +461,11 @@
 }
 </style>
 <script type="text/javascript">
-<% ChartBean home = (ChartBean)request.getAttribute("model"); %>
+<% RecomBean home = (RecomBean)request.getAttribute("model"); %>
 var dataUsage = <%= home.getDataUsageList()%>;
-var networkUsage = <%= home.getNetworkDataList()%>;
-generateCallPageBarChart(dataUsage);
-generatePieChartByNetwork(networkUsage);
+
+generateRecomPageBarChart(dataUsage);
+//generatePieChartByNetwork(networkUsage);
 // generateDonut(ageGroupList);
 // generateAreaChart(categoryData);
 </script>
