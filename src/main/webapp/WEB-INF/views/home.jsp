@@ -23,6 +23,7 @@
 
     <!-- Morris Charts CSS -->
     <link href="<%= request.getContextPath() %>/resources/css/plugins/morris.css" rel="stylesheet">
+    <script type="text/javascript" src="<%= request.getContextPath() %>/resources/DataPlans.json"></script>
 
     <!-- Custom Fonts -->
     <link href="<%= request.getContextPath() %>/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -432,7 +433,15 @@
                                 <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i>Recommendations</h3>
                             </div>
                             <div class="panel-body">
-                                <div id="recommendations"></div>
+                                <div id="recommendations" style="display:none;">
+                                	<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">
+												<i class="fa"></i> <span id="planDesc"></span>
+											</h3>
+										</div>
+									</div>
+                                </div>
                                 
                             </div>
                         </div>
@@ -665,5 +674,18 @@ var dataUsage = <%= home.getDataUsageList()%>;
 generateDataPageBarChart(dataUsage);
 var appUsage = <%= home.getAppUsageList()%>;
 generateDonut(appUsage);
+
+var readJSON = '[{"VZPlan": {"Description": "Upgrade to 1GB Data Plan with less cost. For  more info Dail +813-705-2946",	      "condition": 75,	      "url": "www.google.com"	,"name":"VG1GB"    }	  }	]';
+
+if(limitMessage == 'Usage Exceeded'){
+	var jsonPlan = JSON.parse(readJSON);
+	//alert()
+	for(var j=0;j<jsonPlan.length;j++){
+		var planDetails = jsonPlan[j];
+		var plan = planDetails.VZPlan;
+		$('#recommendations').css('display','');
+		$('#planDesc').html(plan.Description+'&nbsp; <a href='+plan.url+'> Know More..</a>');
+	}
+}
 
 </script>
