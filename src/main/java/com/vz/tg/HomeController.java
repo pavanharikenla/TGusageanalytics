@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -44,17 +46,29 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	@Autowired
 	HomeService homeservice ;
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView login(Locale locale, Model model) {
+		ModelAndView mav = new ModelAndView("login", "model", "");
+		logger.info("bye now");
+		return mav;
+	}
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model) {
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public ModelAndView home(Locale locale, Model model,HttpServletRequest request, @RequestParam("userMobile") String mobileNum) {
 		
 		//logger.info("Welcome home! The client locale is {}.", locale);
 		
 		
 		//model = new object.. set values and set to MAV..
-		String mobNumber = "9052100567";//read from login..
+		String mobNumber = mobileNum;//"9052100567";//read from login..
+		if(mobNumber!=null && !"".equalsIgnoreCase(mobNumber)){
+			request.getSession().setAttribute("userMobile", mobNumber);	
+		}else{
+			mobNumber = (String)request.getSession().getAttribute("userMobile");
+		}
+		
 		
 		DateFormat solrFormat = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss'Z'");
 		DateFormat dateFormat = new SimpleDateFormat ("E MMM d hh:mm:ss zzz yyyy");

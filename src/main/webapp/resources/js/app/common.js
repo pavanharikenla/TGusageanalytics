@@ -108,7 +108,7 @@ function requestCharts(){
 	window.location.href = contextpath + "/charts";
 }
 function requestHome(){
-	window.location.href = contextpath + "/";
+	window.location.href = contextpath + "/home?userMobile=";
 }
 function requestSearch(){
 	window.location.href = contextpath + "/recom";
@@ -295,4 +295,15 @@ Array.prototype.contains = function(obj) {
         }
     }
     return false;
+}
+
+function validateUser(){
+	var user = $('#username').val();
+	var pass = $('#password').val();
+	if((user == '9052100567' || user=='9052567567' || user == '9052567567' || user=='7702303254')&& pass == 'test'){
+		window.location.href=contextpath + "/home?userMobile="+user;
+	}else{
+		alert('Authentication failed! Please enter the correct credentials.');
+	}
+	//alert($('#password').val());
 }

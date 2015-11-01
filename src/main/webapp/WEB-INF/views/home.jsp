@@ -346,7 +346,7 @@
 							<div class="panel-body">
 									<span id="limitMessage"></span>
 								<p class="styled">
-									<meter min="0" max="100" low="25" high="75" optimum="100"
+									<meter min="0" max="" low="" high="" optimum=""
 										value="10" id="usageMeter"></meter>
 									<span id="usageMessage"></span>
 								</p>
@@ -644,6 +644,7 @@ var dataLimit = 524288000;
 var dataLimitForWeek = dataLimit/4;
 //alert('dataLimitForWeek:'+dataLimitForWeek);
 //alert('dataUsageVal:'+dataUsageVal);
+document.getElementById("usageMeter").max =dataLimitForWeek;
 document.getElementById("usageMeter").high = dataLimitForWeek;
 document.getElementById("usageMeter").value = dataUsageVal;
 
