@@ -3,6 +3,7 @@ package com.vz.tg;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -10,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -48,24 +51,75 @@ public class ChartController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/charts", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model) {
+	public ModelAndView home(Locale locale, Model model,HttpServletRequest request) {
 		
 		logger.info("Welcome Charts! The client locale is {}.", locale);
 		
+		String mobNumber = "";//"9052100567";//read from login..
+		mobNumber = (String)request.getSession().getAttribute("userMobile");
+		
+		if(mobNumber == null){
+			mobNumber = "9052100567";
+		}
+		logger.info("Mobile Number from charts:"+mobNumber);
 		//model = new object.. set values and set to MAV..
 		
-		SolrQuery query = new SolrQuery("id:*");
+		/*SolrQuery query = new SolrQuery("id:*");
 		query.set("facet", true);
 		query.addFacetField("tweet_category");
 		query.addSort("tweet_category",SolrQuery.ORDER.asc);
-		query.setRows(0);
+		query.setRows(0);*/
+		
+		DateFormat solrFormat = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss'Z'");
+		DateFormat dateFormat = new SimpleDateFormat ("E MMM d hh:mm:ss zzz yyyy");
+		SimpleDateFormat newFormat = new SimpleDateFormat("MM-dd-yyyy");
+		
+		DateFormat dateFormatsolr = new SimpleDateFormat("yyyy-MM-dd");
+
+		int pastdayscount = 7;
+		
+		SolrQuery query = null;
+		QueryResponse response =null;
+		
 		ChartBean bean = new ChartBean();
 		try{
 			Collection<JSONObject> dataList = new ArrayList<JSONObject>();
 			TreeMap<String,String> dataListObj = new TreeMap<String,String>();
 			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
+			float i=1;
+			while(pastdayscount>0){
+				Calendar cal = Calendar.getInstance();
+		        cal.add(Calendar.DATE, -pastdayscount);
+		        Date todate1 = cal.getTime();    
+		        String fromdate = dateFormatsolr.format(todate1);
+		        query = new SolrQuery("cat:call AND mobile:" +mobNumber+" AND call_end:["+fromdate+"T00:00:00Z TO "+fromdate+"T23:59:59Z] AND call_duartion:[1 TO *]");
+		        query.setRows(0);
+		        query.addFacetField("call_duartion");
+		        response = homeservice.getServiceResponse(query);
+		        
+		        FacetField dataUsedFacetList = response.getFacetField("call_duartion");
+				List<Count> dataValues = dataUsedFacetList.getValues();
+				float dataTotal =0;
+				for(Count dataEntry:dataValues){
+					dataTotal = dataTotal + (Float.parseFloat(dataEntry.getName()))/i;
+					i++;
+				}
+		        
+				String userFormatDate = newFormat.format(todate1);
+				
+				JSONObject timeObject = new JSONObject();
+				timeObject.put("date", userFormatDate);
+				timeObject.put("duration", (Math.round(dataTotal*100))/100);
+				dataList.add(timeObject);
+				dataListObj.put(userFormatDate, String.valueOf((Math.round(dataTotal*100))/100)+ " Mins") ;
+				
+		        
+		        
+		        
+				pastdayscount = pastdayscount-1;
+			}
 			
-			JSONObject timeObject = new JSONObject();
+			/*JSONObject timeObject = new JSONObject();
 			timeObject.put("date", "11-03-2015");
 			timeObject.put("duration", "03:34:42");
 			dataList.add(timeObject);
@@ -106,7 +160,7 @@ public class ChartController {
 			timeObject6.put("date", "10-28-2015");
 			timeObject6.put("duration", "09:31:59");
 			dataList.add(timeObject6);
-			dataListObj.put("10-28-2015", "09:31:59");
+			dataListObj.put("10-28-2015", "09:31:59");*/
 			
 			JSONObject finalObj = new JSONObject();
 			finalObj.put("dataListByDate", dataList);
