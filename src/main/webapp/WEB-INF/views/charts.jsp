@@ -245,11 +245,12 @@
 									<div class="table-responsive">
 										<table class="table table-bordered table-hover table-striped"
 											id="tweetTable">
-											<!-- <thead>
+											<thead>
 												<tr>
-													<th>Tweets</th>
+													<th>Date</th>
+													<th>Usage</th>
 												</tr>
-											</thead> -->
+											</thead>
 											<tbody>
 												<c:forEach var="dateObj" items="${model.dataListRecords}"
 													varStatus="i">
