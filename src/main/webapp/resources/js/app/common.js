@@ -132,6 +132,7 @@ function generateDataPageBarChart(responseObj){
     }).on('click', function(i, row){
     	  console.log(i, row);
     	  var ddDateObj = row;
+    	  //alert(ddDateObj.date);
     	  getDataUsageByDate(ddDateObj.date);
     });
 }
@@ -302,8 +303,13 @@ function validateUser(){
 	var pass = $('#password').val();
 	if((user == '9052100567' || user=='9052567567' || user == '9052567567' || user=='7702303254')&& pass == 'test'){
 		window.location.href=contextpath + "/home?userMobile="+user;
+		$('#errorMsg').html('Loading plase wait...');
+		$('#errorMsg').css("background","white");
 	}else{
-		alert('Authentication failed! Please enter the correct credentials.');
+		//alert('Authentication failed! Please enter the correct credentials.');
+		$('#errorMsg').html('Authentication failed!');
+		$('#errorMsg').css("background","white");
 	}
 	//alert($('#password').val());
 }
+

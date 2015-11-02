@@ -1,6 +1,7 @@
 package com.vz.tg;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -368,16 +369,51 @@ public class HomeController {
 		
 	@RequestMapping(value = "/getDataByDate", method = RequestMethod.GET)
 	@ResponseBody
-	public String getDataByDate(@RequestParam("dateVal") String dateVal) {
+	public String getDataByDate(HttpServletRequest request, @RequestParam("dateVal") String dateVal) {
 		JSONObject finalRes = new JSONObject();
 		Collection<JSONObject> hourlyList = new ArrayList<JSONObject>();
-		
+		String mobNumber = (String)request.getSession().getAttribute("userMobile");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		SimpleDateFormat solrFormat = new SimpleDateFormat("yyyy-MM-dd");
 		if(dateVal!=null && !"".equalsIgnoreCase(dateVal)){
-			
+			String[] dayHours = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"};
+			for( int i = 0; i <= dayHours.length - 1; i++)
+			{
+				Date newDate ;
+				String finalDate = "";
+				try {
+					newDate = sdf.parse(dateVal);
+					finalDate = solrFormat.format(newDate);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				SolrQuery query = new SolrQuery("mobile:"+mobNumber+" AND data_usage_end_time:["+finalDate+"T"+dayHours[i]+":00:00Z TO "+finalDate+"T"+dayHours[i]+":59:59Z] AND dataUsed:[1 TO *]");
+		        query.setRows(0);
+		        query.addFacetField("dataUsed");
+		        QueryResponse response = homeservice.getServiceResponse(query);
+		        if(response!=null){
+			        FacetField dataUsedFacetList = response.getFacetField("dataUsed");
+					List<Count> dataValues = dataUsedFacetList.getValues();
+					float dataTotal =0;
+					for(Count dataEntry:dataValues){
+						dataTotal = dataTotal + Float.parseFloat(dataEntry.getName()) *dataEntry.getCount();
+					}
+			        
+					//String userFormatDate = newFormat.format(todate1);
+					
+					JSONObject timeObject = new JSONObject();
+					timeObject.put("time", dayHours[i]+"Hrs");
+					timeObject.put("bytes", dataTotal*1024);
+					hourlyList.add(timeObject);
+		        }
+				//dataListObj.put(userFormatDate, (long)dataTotal*1024);
+				
+			}
 			
 		}
 		
-		JSONObject timeObj = new JSONObject();
+		/*JSONObject timeObj = new JSONObject();
 		timeObj.put("time", "12AM");
 		timeObj.put("bytes", "123456");
 		hourlyList.add(timeObj);
@@ -435,7 +471,7 @@ public class HomeController {
 		JSONObject timeObj11 = new JSONObject();
 		timeObj11.put("time", "11AM");
 		timeObj11.put("bytes", "12456");
-		hourlyList.add(timeObj11);
+		hourlyList.add(timeObj11);*/
 		
 		finalRes.put("hourlyListByDate", hourlyList);
 		

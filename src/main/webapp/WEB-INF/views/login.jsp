@@ -92,6 +92,7 @@
 							<p>
 								<input type="button" value="Login" onclick="validateUser();">
 							</p>
+							<p id="errorMsg"></p>
 						</fieldset>
 					</form>
 				</div>
@@ -170,5 +171,23 @@ form fieldset a {
 color: #5a5656;
 font-size: 10px;
 }
-</style>
 
+#errorMsg{padding: 10px;width: 280px;}
+</style>
+<script>
+$('#username').keypress(function(event){ 
+    var keyCode = (event.keyCode ? event.keyCode : event.which);   
+    if (keyCode == '13') {
+    	validateUser();
+    }
+    event.stopPropagation();
+});
+
+$('#password').keypress(function(event){ 
+    var keyCode = (event.keyCode ? event.keyCode : event.which);   
+    if (keyCode == '13') {
+    	validateUser();
+    }
+    event.stopPropagation();
+});s
+</script>
