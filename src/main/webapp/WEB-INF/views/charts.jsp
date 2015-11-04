@@ -28,6 +28,8 @@
     <link href="<%= request.getContextPath() %>/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!--  script src="<%= request.getContextPath() %>/resources/js/angular/angular.min.js"></script>-->
     <script src="<%= request.getContextPath() %>/resources/js/app/common.js"></script>
+    
+    <script src="<%= request.getContextPath() %>/resources/DataPlans.json"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -295,7 +297,7 @@
                     </div>
 					</div>
 					<div class="col-lg-6">
-                    	<div class="panel panel-default" id="flot-bar-chart-dialyVol-panel">
+                    	<div class="panel panel-default" id="flot-bar-chart-dialyVol-panel" style="display:none;">
 	                        <div class="panel-heading" id="flot-bar-chart-dialyVol-panel-head" style="display: none;">
 	                            <h3 class="panel-title">
 	                            	<i class="fa fa-bar-chart-o fa-fw"></i><span id="hourlySpanTitle"></span>
@@ -440,7 +442,7 @@
 </html>
 <style>
 .navbar-right{margin-top:20px;color:white !important;}
-#morris-bar-chart-dataVol{min-height: 250px;}
+#morris-bar-chart-dataVol{min-height: 290px;}
 #flot-pie-chart-tg-sm{min-height: 250px;}
 #flot-pie-chart-tg{min-height: 250px;}
 #prevNav{cursor: pointer;}

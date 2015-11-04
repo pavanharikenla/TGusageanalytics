@@ -111,6 +111,7 @@ function getCallUsageByDate(dateObj){
 	$.ajax({url: urlLnk, success: function(result){		
         var jsonObjResp = JSON.parse(result);
         var recipientList = jsonObjResp.recipientListByDate;
+        $('#flot-bar-chart-dialyVol-panel').css("display","block");
         generatePieChartProductCall(recipientList);
         $('#flot-bar-chart-dialyVol-panel').addClass('panel');
     	$('#flot-bar-chart-dialyVol-panel-head').css("display","");

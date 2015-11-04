@@ -1,6 +1,7 @@
 package com.vz.tg;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.vz.tg.model.ChartBean;
 import com.vz.tg.model.HomeBean;
 import com.vz.tg.services.HomeService;
+import com.vz.tg.util.RandonGen;
 
 /**
  * Handles requests for the application home page.
@@ -86,13 +88,14 @@ public class ChartController {
 			Collection<JSONObject> dataList = new ArrayList<JSONObject>();
 			TreeMap<String,String> dataListObj = new TreeMap<String,String>();
 			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
-			float i=1;
+			RandonGen rg = new RandonGen();
+			//float i=1;
 			while(pastdayscount>0){
 				Calendar cal = Calendar.getInstance();
 		        cal.add(Calendar.DATE, -pastdayscount);
 		        Date todate1 = cal.getTime();    
 		        String fromdate = dateFormatsolr.format(todate1);
-		        query = new SolrQuery("cat:call AND mobile:" +mobNumber+" AND call_end:["+fromdate+"T00:00:00Z TO "+fromdate+"T23:59:59Z] AND call_duartion:[1 TO *]");
+		        query = new SolrQuery("cat:call AND mobile:" +mobNumber+" AND call_end:["+fromdate+"T00:00:00Z TO "+fromdate+"T23:59:59Z]");
 		        query.setRows(0);
 		        query.addFacetField("call_duartion");
 		        response = homeservice.getServiceResponse(query);
@@ -101,17 +104,17 @@ public class ChartController {
 				List<Count> dataValues = dataUsedFacetList.getValues();
 				float dataTotal =0;
 				for(Count dataEntry:dataValues){
-					dataTotal = dataTotal + (Float.parseFloat(dataEntry.getName()))/i;
-					i++;
+					dataTotal = dataTotal + (Float.parseFloat(dataEntry.getName())) * dataEntry.getCount();
+					//i++;
 				}
-		        
+				//dataTotal = dataTotal / rg.get2DigitNum();
 				String userFormatDate = newFormat.format(todate1);
 				
 				JSONObject timeObject = new JSONObject();
 				timeObject.put("date", userFormatDate);
-				timeObject.put("duration", (Math.round(dataTotal*100))/100);
+				timeObject.put("duration", dataTotal);
 				dataList.add(timeObject);
-				dataListObj.put(userFormatDate, String.valueOf((Math.round(dataTotal*100))/100)+ " Mins") ;
+				dataListObj.put(userFormatDate, dataTotal+ " Mins") ;
 				
 		        
 		        
@@ -161,36 +164,62 @@ public class ChartController {
 			timeObject6.put("duration", "09:31:59");
 			dataList.add(timeObject6);
 			dataListObj.put("10-28-2015", "09:31:59");*/
+			Calendar cal = Calendar.getInstance();
+	        cal.add(Calendar.DATE, -7);
+	        Date todate1 = cal.getTime();    
+	        String fromdate = dateFormatsolr.format(todate1);
+	        
+	        Calendar cal1 = Calendar.getInstance();
+	        cal1.add(Calendar.DATE, -1);
+	        Date todate2 = cal.getTime();    
+	        String fromdate1 = dateFormatsolr.format(todate2);
+			query = new SolrQuery("cat:call AND mobile:" +mobNumber+" AND call_end:["+fromdate+"T00:00:00Z TO "+fromdate1+"T23:59:59Z]");
+			
+			query.setRows(0);
+	        query.addFacetField("recipient_network");
+	        response = homeservice.getServiceResponse(query);
+	        
+	        FacetField dataUsedFacetList = response.getFacetField("recipient_network");
+			List<Count> dataValues = dataUsedFacetList.getValues();
+			float dataTotal =0;
+			for(Count dataEntry:dataValues){
+				//dataTotal = dataTotal + (Float.parseFloat(dataEntry.getName())) * dataEntry.getCount();
+				//i++;
+				JSONObject timeObj = new JSONObject();
+				timeObj.put("label", dataEntry.getName());
+				timeObj.put("data", dataEntry.getCount());
+				networkList.add(timeObj);
+			}
 			
 			JSONObject finalObj = new JSONObject();
 			finalObj.put("dataListByDate", dataList);
 			bean.setDataListRecords(dataListObj);
 			bean.setDataUsageList(finalObj);
 			//network
-			JSONObject timeObj = new JSONObject();
+			/*JSONObject timeObj = new JSONObject();
 			timeObj.put("label", "Verizon");
-			timeObj.put("data", 25.5);
+			timeObj.put("data", rg.get2DigitNum());
 			networkList.add(timeObj);
 			
 			JSONObject timeObj1 = new JSONObject();
 			timeObj1.put("label", "TMobile");
-			timeObj1.put("data", 14.5);
+			timeObj1.put("data", rg.get2DigitNum());
 			networkList.add(timeObj1);
 
 			JSONObject timeObj2 = new JSONObject();
 			timeObj2.put("label", "AT&T");
-			timeObj2.put("data", 30.6);
+			timeObj2.put("data", rg.get2DigitNum());
 			networkList.add(timeObj2);
 			
 			JSONObject timeObj3 = new JSONObject();
 			timeObj3.put("label", "centuryLink");
-			timeObj3.put("data", 32.3);
+			timeObj3.put("data", rg.get2DigitNum());
 			networkList.add(timeObj3);			
 			
 			JSONObject timeObj4 = new JSONObject();
 			timeObj4.put("label", "Other");
-			timeObj4.put("data", 10.8);
-			networkList.add(timeObj4);
+			timeObj4.put("data", rg.get2DigitNum());
+			networkList.add(timeObj4);*/
 			
 			JSONObject finalNetObj = new JSONObject();
 			finalNetObj.put("networkListPast", networkList);
@@ -320,11 +349,55 @@ public class ChartController {
 	
 	@RequestMapping(value = "/getCallByDate", method = RequestMethod.GET)
 	@ResponseBody
-	public String getDataByDate(@RequestParam("dateVal") String dateVal) {
+	public String getDataByDate(@RequestParam("dateVal") String dateVal,HttpServletRequest request) {
 		JSONObject finalRes = new JSONObject();
 		Collection<JSONObject> recipentList = new ArrayList<JSONObject>();
 		System.out.println("dateVal:"+dateVal);
-		if("11-03-2015".equals(dateVal)){
+		
+		DateFormat solrFormat = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss'Z'");
+		DateFormat dateFormat = new SimpleDateFormat ("E MMM d hh:mm:ss zzz yyyy");
+		SimpleDateFormat newFormat = new SimpleDateFormat("MM-dd-yyyy");
+		
+		DateFormat dateFormatsolr = new SimpleDateFormat("MM-dd-yyyy");
+		DateFormat dateFormatsolr1 = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -7);
+        Date todate1 = cal.getTime();    
+        Date fromdate12 = null;
+		try {
+			fromdate12 = dateFormatsolr.parse(dateVal);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}     
+        String fromdate = dateFormatsolr1.format(fromdate12);
+        String mobNumber = "";//"9052100567";//read from login..
+		mobNumber = (String)request.getSession().getAttribute("userMobile");
+		
+		if(mobNumber == null){
+			mobNumber = "9052100567";
+		}
+		logger.info("Mobile Number from charts:"+mobNumber);
+        
+		SolrQuery query = new SolrQuery("cat:call AND mobile:" +mobNumber+" AND call_end:["+fromdate+"T00:00:00Z TO "+fromdate+"T23:59:59Z]");
+		
+		query.setRows(0);
+        query.addFacetField("recipient_network");
+        QueryResponse response = homeservice.getServiceResponse(query);
+        
+        FacetField dataUsedFacetList = response.getFacetField("recipient_network");
+		List<Count> dataValues = dataUsedFacetList.getValues();
+		float dataTotal =0;
+		for(Count dataEntry:dataValues){
+			//dataTotal = dataTotal + (Float.parseFloat(dataEntry.getName())) * dataEntry.getCount();
+			//i++;
+			JSONObject timeObj = new JSONObject();
+			timeObj.put("label", dataEntry.getName());
+			timeObj.put("data", dataEntry.getCount());
+			recipentList.add(timeObj);
+		}
+		
+		/*if("11-03-2015".equals(dateVal)){
 			JSONObject timeObj = new JSONObject();
 			timeObj.put("label", "Verizon");
 			timeObj.put("data", 19.5);
@@ -499,7 +572,7 @@ public class ChartController {
 			timeObj4.put("label", "Other");
 			timeObj4.put("data", 6.8);
 			recipentList.add(timeObj4);
-		}
+		}*/
 				
 		finalRes.put("recipientListByDate", recipentList);
 		

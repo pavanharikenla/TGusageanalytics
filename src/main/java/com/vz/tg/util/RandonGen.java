@@ -16,11 +16,20 @@ public class RandonGen {
 		System.out.println("Email: "+rg.getEmail());	
 		rg.duration();
 		rg.getElpasedTime();
+		for(int i=0;i<101;i++){
+			System.out.println(rg.get2DigitNum());
+		}
 	}
 	
 	public long getMobileNum(){
 		long number = 0;		
 		number = (long) Math.floor(Math.random() * 9000000000L) + 1000000000L;		
+		return number;
+	}
+	
+	public int get2DigitNum(){
+		int number = 0;		
+		number = (int) Math.floor(Math.random() * 50) + 10;		
 		return number;
 	}
 	
