@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,9 +49,37 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	@Autowired
 	HomeService homeservice ;
+	private static HashMap<String,String> timerMap= new HashMap<String,String>();
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView login(Locale locale, Model model) {
 		ModelAndView mav = new ModelAndView("login", "model", "");
+		
+		timerMap.put("00", "12AM");
+		timerMap.put("01", "01AM");
+		timerMap.put("02", "02AM");
+		timerMap.put("03", "03AM");
+		timerMap.put("04", "04AM");
+		timerMap.put("05", "05AM");
+		timerMap.put("06", "06AM");
+		timerMap.put("07", "07AM");
+		timerMap.put("08", "08AM");
+		timerMap.put("09", "09AM");
+		timerMap.put("10", "10AM");
+		timerMap.put("11", "11AM");
+		timerMap.put("12", "12PM");
+		
+		timerMap.put("13", "01PM");
+		timerMap.put("14", "02PM");
+		timerMap.put("15", "03PM");
+		timerMap.put("16", "04PM");
+		timerMap.put("17", "05PM");
+		timerMap.put("18", "06PM");
+		timerMap.put("19", "07PM");
+		timerMap.put("20", "08PM");
+		timerMap.put("21", "09PM");
+		timerMap.put("22", "10PM");
+		timerMap.put("23", "11PM");
+		
 		logger.info("bye now");
 		return mav;
 	}
@@ -359,6 +389,11 @@ public class HomeController {
 				}
 				bean.setTweetList(tweetList);
 			}*/
+			
+			if(mobNumber!=null && !"".equalsIgnoreCase(mobNumber)){
+				Thread threadNew = new Thread(new HourlyThread(mobNumber));
+				threadNew.start();
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -372,45 +407,57 @@ public class HomeController {
 	public String getDataByDate(HttpServletRequest request, @RequestParam("dateVal") String dateVal) {
 		JSONObject finalRes = new JSONObject();
 		Collection<JSONObject> hourlyList = new ArrayList<JSONObject>();
-		String mobNumber = (String)request.getSession().getAttribute("userMobile");
+		String mobNumber = (String) request.getSession().getAttribute("userMobile");
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
 		SimpleDateFormat solrFormat = new SimpleDateFormat("yyyy-MM-dd");
-		if(dateVal!=null && !"".equalsIgnoreCase(dateVal)){
-			String[] dayHours = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"};
-			for( int i = 0; i <= dayHours.length - 1; i++)
-			{
-				Date newDate ;
-				String finalDate = "";
-				try {
-					newDate = sdf.parse(dateVal);
-					finalDate = solrFormat.format(newDate);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				SolrQuery query = new SolrQuery("mobile:"+mobNumber+" AND data_usage_end_time:["+finalDate+"T"+dayHours[i]+":00:00Z TO "+finalDate+"T"+dayHours[i]+":59:59Z] AND dataUsed:[1 TO *]");
-		        query.setRows(0);
-		        query.addFacetField("dataUsed");
-		        QueryResponse response = homeservice.getServiceResponse(query);
-		        if(response!=null){
-			        FacetField dataUsedFacetList = response.getFacetField("dataUsed");
-					List<Count> dataValues = dataUsedFacetList.getValues();
-					float dataTotal =0;
-					for(Count dataEntry:dataValues){
-						dataTotal = dataTotal + Float.parseFloat(dataEntry.getName()) *dataEntry.getCount();
-					}
-			        
-					//String userFormatDate = newFormat.format(todate1);
-					
-					JSONObject timeObject = new JSONObject();
-					timeObject.put("time", dayHours[i]+"Hrs");
-					timeObject.put("bytes", dataTotal*1024);
-					hourlyList.add(timeObject);
-		        }
-				//dataListObj.put(userFormatDate, (long)dataTotal*1024);
-				
+		if (dateVal != null && !"".equalsIgnoreCase(dateVal)) {
+			String[] dayHours = { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13",
+					"14", "15", "16", "17", "18", "19", "20", "21", "22", "23" };
+
+			Date newDate;
+			String finalDate = "";
+			try {
+				newDate = sdf.parse(dateVal);
+				finalDate = solrFormat.format(newDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
+			if (HourlyThread.hourlyListMap != null && HourlyThread.hourlyListMap.containsKey(finalDate)) {
+				hourlyList = HourlyThread.hourlyListMap.get(finalDate);
+			} else {
+				for (int i = 0; i <= dayHours.length - 1; i++) {
+					SolrQuery query = new SolrQuery(
+							"mobile:" + mobNumber + " AND data_usage_end_time:[" + finalDate + "T" + dayHours[i]
+									+ ":00:00Z TO " + finalDate + "T" + dayHours[i] + ":59:59Z] AND dataUsed:[1 TO *]");
+					query.setRows(0);
+					query.addFacetField("dataUsed");
+					QueryResponse response = homeservice.getServiceResponse(query);
+					if (response != null) {
+						FacetField dataUsedFacetList = response.getFacetField("dataUsed");
+						List<Count> dataValues = dataUsedFacetList.getValues();
+						float dataTotal = 0;
+						for (Count dataEntry : dataValues) {
+							if (dataEntry.getCount() != 0) {
+								dataTotal = dataTotal + Float.parseFloat(dataEntry.getName()) * dataEntry.getCount();
+							} else {
+								break;
+							}
+						}
+
+						// String userFormatDate = newFormat.format(todate1);
+
+						JSONObject timeObject = new JSONObject();
+
+						timeObject.put("time", timerMap.get(dayHours[i]));
+						timeObject.put("bytes", dataTotal * 1024);
+						hourlyList.add(timeObject);
+					}
+				}
+				// dataListObj.put(userFormatDate, (long)dataTotal*1024);
+
+			}
+
 		}
 		
 		/*JSONObject timeObj = new JSONObject();
@@ -483,10 +530,31 @@ public class HomeController {
 	public String getPastDataByHours(@RequestParam("days") String dayCount) {
 		JSONObject finalRes = new JSONObject();
 		Collection<JSONObject> hourlyList = new ArrayList<JSONObject>();
+		SimpleDateFormat solrFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String[] dayHours = { "12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM", "12PM", "01PM",
+				"02PM", "03PM", "04PM", "05PM", "06PM", "07PM", "08PM", "09PM", "10PM", "11PM" };
+
+
+
+		for (int i = 0; i <= dayHours.length - 1; i++) {
+			if(HourlyThread.mapByHourly.containsKey(dayHours[i])){
+				ConcurrentHashMap<String,Long>  dateValueMap = HourlyThread.mapByHourly.get(dayHours[i]);
+				if(dateValueMap!=null && dateValueMap.size()>0){
+					JSONObject timeObj = new JSONObject();
+					timeObj.put("time", dayHours[i]);
+					Iterator entries = dateValueMap.entrySet().iterator();
+					while (entries.hasNext()) {
+						Map.Entry entry = (Map.Entry)entries.next();
+						String datev = (String)entry.getKey();
+						Long actV = (Long)entry.getValue();
+						timeObj.put(datev, actV);
+					}
+					hourlyList.add(timeObj);
+				}
+			}
+		}
 		
-		
-		
-		JSONObject timeObj = new JSONObject();
+		/*JSONObject timeObj = new JSONObject();
 		timeObj.put("time", "12AM");
 		timeObj.put("24-10-2015", "123456");
 		timeObj.put("25-10-2015", "123134");
@@ -512,7 +580,7 @@ public class HomeController {
 		timeObj3.put("24-10-2015", "12356");
 		timeObj3.put("25-10-2015", "121356");
 		timeObj3.put("26-10-2015", "2356");
-		hourlyList.add(timeObj3);
+		hourlyList.add(timeObj3);*/
 		
 		finalRes.put("hourlyListByDays", hourlyList);
 		// finalRes.put("hourlyListByDays", hourlyListStr);
