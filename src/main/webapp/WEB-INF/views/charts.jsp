@@ -39,6 +39,20 @@
     <![endif]-->
 	<script type="text/javascript">
 	var contextpath = "<%= request.getContextPath() %>";
+	
+	var SecondsTohhmmss = function(totalSeconds) {
+		  var hours   = Math.floor(totalSeconds / 3600);
+		  var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+		  var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+
+		  // round seconds
+		  seconds = Math.round(seconds * 100) / 100
+
+		  var result = (hours < 10 ? "0" + hours : hours);
+		      result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+		      result += ":" + (seconds  < 10 ? "0" + seconds : seconds);
+		  return result;
+		}
 	</script>
 </head>
 
@@ -250,7 +264,7 @@
 											<thead>
 												<tr>
 													<th>Date</th>
-													<th>Usage</th>
+													<th>Usage (HH:MM:SS)</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -258,7 +272,7 @@
 													varStatus="i">
 													<tr>
 														<td>${dateObj.key}</td>
-														<td>${dateObj.value}</td>
+														<td><script type="text/javascript">var callVol = '${dateObj.value}';var callMin = callVol.split('.');document.write(SecondsTohhmmss(callMin[0]*60));</script></td>
 													</tr>
 												</c:forEach>
 											</tbody>
