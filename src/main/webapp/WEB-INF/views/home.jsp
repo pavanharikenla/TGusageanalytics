@@ -61,7 +61,7 @@
             <ul class="nav navbar-right top-nav">
             	<li class="message-preview">
             	<div class="media-body">
-                       <h5 class="media-heading"><strong>TOP GUNS</strong>
+                       <h5 class="media-heading"><strong>TOP GUNS New</strong>
                        </h5>
                  </div>
                 </li>
