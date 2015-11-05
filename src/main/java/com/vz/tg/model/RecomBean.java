@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import org.json.JSONObject;
 
 public class RecomBean {
-	private TreeMap<String,String> dataListRecords = new TreeMap<String,String>();
+	private LinkedHashMap<String,String> dataListRecords = new LinkedHashMap<String,String>();
 	private JSONObject dataUsageList;
 	private LinkedHashMap<String,Float> calldataListRecords = new LinkedHashMap<String,Float>();
 	
@@ -33,10 +33,11 @@ public class RecomBean {
 	public void setSelPlan(Integer selPlan) {
 		this.selPlan = selPlan;
 	}
-	public TreeMap<String, String> getDataListRecords() {
+	
+	public LinkedHashMap<String, String> getDataListRecords() {
 		return dataListRecords;
 	}
-	public void setDataListRecords(TreeMap<String, String> dataListRecords) {
+	public void setDataListRecords(LinkedHashMap<String, String> dataListRecords) {
 		this.dataListRecords = dataListRecords;
 	}
 	public JSONObject getDataUsageList() {

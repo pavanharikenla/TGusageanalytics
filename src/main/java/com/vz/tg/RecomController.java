@@ -56,49 +56,49 @@ public class RecomController {
 		RecomBean bean = new RecomBean();
 		try{
 			Collection<JSONObject> dataList = new ArrayList<JSONObject>();
-			TreeMap<String,String> dataListObj = new TreeMap<String,String>();
+			LinkedHashMap<String,String> dataListObj = new LinkedHashMap<String,String>();
 			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
 			
 			Collection<JSONObject> calldataList = new ArrayList<JSONObject>();
 			LinkedHashMap<String,Float> calldataListObj = new LinkedHashMap<String,Float>();
 			
-			JSONObject timeObject = new JSONObject();
-			timeObject.put("date", "October");
-			timeObject.put("duration", "650");
-			dataList.add(timeObject);
-			dataListObj.put("10-October", "650 MB");
 			
-			
-			JSONObject timeObject1 = new JSONObject();
-			timeObject1.put("date", "September");
-			timeObject1.put("duration", "700");
-			dataList.add(timeObject1);
-			dataListObj.put("09-September", "700 MB");
-			
-			JSONObject timeObject2 = new JSONObject();
-			timeObject2.put("date", "August");
-			timeObject2.put("duration", "550");
-			dataList.add(timeObject2);
-			dataListObj.put("08-August", "550 MB");
-			
-			JSONObject timeObject3 = new JSONObject();
-			timeObject3.put("date", "July");
-			timeObject3.put("duration", "750");
-			dataList.add(timeObject3);
-			dataListObj.put("07-July", "750 MB");
-			
-			JSONObject timeObject4 = new JSONObject();
-			timeObject4.put("date", "June");
-			timeObject4.put("duration", "850");
-			dataList.add(timeObject4);
-			dataListObj.put("06-June", "850 MB");
 			
 			JSONObject timeObject5 = new JSONObject();
 			timeObject5.put("date", "May");
 			timeObject5.put("duration", "650");
 			dataList.add(timeObject5);
-			dataListObj.put("05-May", "650 MB");
+			dataListObj.put("May", "650 MB");
 			
+			JSONObject timeObject4 = new JSONObject();
+			timeObject4.put("date", "June");
+			timeObject4.put("duration", "850");
+			dataList.add(timeObject4);
+			dataListObj.put("June", "850 MB");
+			
+			JSONObject timeObject3 = new JSONObject();
+			timeObject3.put("date", "July");
+			timeObject3.put("duration", "750");
+			dataList.add(timeObject3);
+			dataListObj.put("July", "750 MB");
+			
+			JSONObject timeObject2 = new JSONObject();
+			timeObject2.put("date", "August");
+			timeObject2.put("duration", "550");
+			dataList.add(timeObject2);
+			dataListObj.put("August", "550 MB");
+			
+			JSONObject timeObject1 = new JSONObject();
+			timeObject1.put("date", "September");
+			timeObject1.put("duration", "700");
+			dataList.add(timeObject1);
+			dataListObj.put("September", "700 MB");
+			
+			JSONObject timeObject = new JSONObject();
+			timeObject.put("date", "October");
+			timeObject.put("duration", "650");
+			dataList.add(timeObject);
+			dataListObj.put("October", "650 MB");
 					
 			JSONObject finalObj = new JSONObject();
 			finalObj.put("dataListByDate", dataList);
