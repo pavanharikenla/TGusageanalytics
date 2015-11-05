@@ -1,5 +1,6 @@
 package com.vz.tg.model;
 
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 import org.json.JSONObject;
@@ -7,14 +8,17 @@ import org.json.JSONObject;
 public class RecomBean {
 	private TreeMap<String,String> dataListRecords = new TreeMap<String,String>();
 	private JSONObject dataUsageList;
-	private TreeMap<String,String> calldataListRecords = new TreeMap<String,String>();
-	private JSONObject calldataUsageList;
-	public TreeMap<String, String> getCalldataListRecords() {
+	private LinkedHashMap<String,Float> calldataListRecords = new LinkedHashMap<String,Float>();
+	
+	public LinkedHashMap<String, Float> getCalldataListRecords() {
 		return calldataListRecords;
 	}
-	public void setCalldataListRecords(TreeMap<String, String> calldataListRecords) {
+	public void setCalldataListRecords(LinkedHashMap<String, Float> calldataListRecords) {
 		this.calldataListRecords = calldataListRecords;
 	}
+	private JSONObject calldataUsageList;
+	
+	
 	public JSONObject getCalldataUsageList() {
 		return calldataUsageList;
 	}

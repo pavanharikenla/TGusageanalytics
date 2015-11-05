@@ -1,24 +1,21 @@
 package com.vz.tg;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.apache.solr.client.solrj.response.PivotField;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.util.NamedList;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +24,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.vz.tg.model.ChartBean;
-import com.vz.tg.model.HomeBean;
 import com.vz.tg.model.RecomBean;
 import com.vz.tg.services.HomeService;
 
@@ -49,7 +42,7 @@ public class RecomController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/recom", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model) {
+	public ModelAndView home(Locale locale, Model model,HttpServletRequest request) {
 		
 		logger.info("Welcome Charts! The client locale is {}.", locale);
 		
@@ -67,7 +60,7 @@ public class RecomController {
 			Collection<JSONObject> networkList = new ArrayList<JSONObject>();
 			
 			Collection<JSONObject> calldataList = new ArrayList<JSONObject>();
-			TreeMap<String,String> calldataListObj = new TreeMap<String,String>();
+			LinkedHashMap<String,Float> calldataListObj = new LinkedHashMap<String,Float>();
 			
 			JSONObject timeObject = new JSONObject();
 			timeObject.put("date", "October");
@@ -144,8 +137,55 @@ public class RecomController {
 				break;
 			}
 			
+			String mobNumber = (String)request.getSession().getAttribute("userMobile");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			int past6Months = 6;
+			while(past6Months>0){
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.MONTH, -past6Months);
+				calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+				Date pasttMonthFirstDay = calendar.getTime();
+				calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+				Date pastMonthLastDay = calendar.getTime();
+				
+				String fromDate = sdf.format(pasttMonthFirstDay);
+				String toDate = sdf.format(pastMonthLastDay);
+				
+				query = new SolrQuery("cat:call AND mobile:" +mobNumber+" AND call_end:["+fromDate+"T00:00:00Z TO "+toDate+"T23:59:59Z]");
+				query.setRows(0);
+				query.setFacet(true);
+				query.addFacetField("call_duartion");
+				
+				QueryResponse response = homeservice.getServiceResponse(query);
+				
+				if(response!=null){
+					FacetField dataUsedFacetList = response.getFacetField("call_duartion");
+					List<Count> dataValues = dataUsedFacetList.getValues();
+					float dataTotal =0;
+					for(Count dataEntry:dataValues){
+						if(dataEntry.getCount()>0){
+							dataTotal = dataTotal + (Float.parseFloat(dataEntry.getName())) * dataEntry.getCount();
+						}else{
+							break;
+						}
+						//i++;
+					}
+					//dataTotal = dataTotal / rg.get2DigitNum();
+					String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+					
+					JSONObject calltimeObject = new JSONObject();
+					calltimeObject.put("date", month);
+					calltimeObject.put("duration", dataTotal);
+					calldataList.add(calltimeObject);
+					calldataListObj.put(month, dataTotal);
+				}
+				past6Months = past6Months-1;
+			}
+			
+			
+			
 			//call usage
-			JSONObject calltimeObject = new JSONObject();
+			/*JSONObject calltimeObject = new JSONObject();
 			calltimeObject.put("date", "October");
 			calltimeObject.put("duration", "90");
 			calldataList.add(calltimeObject);
@@ -180,7 +220,7 @@ public class RecomController {
 			calltimeObject5.put("date", "May");
 			calltimeObject5.put("duration", "180");
 			calldataList.add(calltimeObject5);
-			calldataListObj.put("05-May", "180 hrs");
+			calldataListObj.put("05-May", "180 hrs");*/
 			
 			JSONObject callfinalObj = new JSONObject();
 			callfinalObj.put("calldataListByDate", calldataList);

@@ -248,7 +248,7 @@
 											<thead>
 												<tr>
 													<th>Date</th>
-													<th>Usage</th>
+													<th>Data Usage</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -304,7 +304,7 @@
 											<thead>
 												<tr>
 													<th>Date</th>
-													<th>Usage</th>
+													<th>Call Usage</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -312,7 +312,7 @@
 													varStatus="i">
 													<tr>
 														<td>${dateObj.key}</td>
-														<td>${dateObj.value}</td>
+														<td><script type="text/javascript">var callVol = '${dateObj.value}';var callMin = callVol.split('.');document.write(SecondsTohhmmss(callMin[0]*60));</script></td>
 													</tr>
 												</c:forEach>
 											</tbody>
